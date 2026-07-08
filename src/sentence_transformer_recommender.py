@@ -1,11 +1,15 @@
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
+from config import movies_csv,embeddings_file
 import numpy as np
+import pandas as pd
 import re
 
 st_model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 
-st_matrix = np.load("models/embeddings.npy")
+st_matrix = np.load(embeddings_file)
+df=pd.read_csv(movies_csv)
+
 
 def recommend_new_movie(searched_movie):
     overview=searched_movie.get("overview","") #text preprocessing
