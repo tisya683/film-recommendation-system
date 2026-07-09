@@ -1,6 +1,6 @@
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
-from config import movies_csv,embeddings_file
+from src.config import movies_csv,embeddings_file
 import numpy as np
 import pandas as pd
 import re
