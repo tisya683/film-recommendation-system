@@ -28,7 +28,7 @@ def recommend_new_movie(searched_movie):
     similarity_scores = [x[1] for x in ranked]
 
     #get recommendations 
-    recs=df.iloc[movie_indices][["id","title","weighted_rating","original_language"]].copy()
+    recs=df.iloc[movie_indices][["id","title","weighted_rating","original_language","overview"]].copy()
 
     recs["similarity_score"]=similarity_scores
 

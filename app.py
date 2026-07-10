@@ -1,17 +1,26 @@
 import streamlit as st
 from src.sentence_transformer_recommender import recommend_new_movie
 from src.api import get_title,get_poster
+from src.config import image
 
 
-st.title(":pink[Foreign Film Recs ヾ(⁍̴̆◡⁍̴̆。)ノ✧･ﾟ:]")
+st.markdown('''
+<h1 style="color:#FFD1DC;">Foreign Film Recsヾ(⁍̴̆◡⁍̴̆。)ノ✧･ﾟ:</h1>
+''', unsafe_allow_html=True)
 
-st.write(
+st.subheader(
     '''instructions: Search for any film in the text box and get 5 similar foreign recommendations '''
 )
 
-st.markdown('''by exposing yourself to a film in a different language you are immersing yourself with the culture and gain a 
-                whole new perspective on how life is actually lived on the other side of the world''')
+st.markdown('''
+<p style="font-size:22px; color:#FFF5A0;">
+by exposing yourself to a film in a different language you are immersing yourself with the culture and gaining a 
+whole new perspective on how life is actually lived on the other side of the world
+</p>
+''', unsafe_allow_html=True)
 
+
+st.image(image,use_container_width=True)
 
 movie_name=st.text_input("movie title")
 
@@ -48,7 +57,9 @@ if movie_name:
             with col: # everything inside must be displayed in each streamlit col
                 poster=get_poster(movie["id"])
                 if poster:
-                    st.image(poster,width=200)
+                    st.image(poster,width=400)
                 
                 st.write(movie["title"])
                 st.write(f"{movie["weighted_rating"]:.1f}")
+                with st.expander("info"):
+                    st.write(movie["overview"])
