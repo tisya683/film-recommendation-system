@@ -1,10 +1,11 @@
 from dotenv import load_dotenv
+import streamlit as st
 import os 
 from pathlib import Path
 
 load_dotenv()
 #api key
-TMDB_API_KEY=os.getenv("API_KEY")
+TMDB_API_KEY=st.secrets.get("API_KEY",os.getenv("API_KEY")) #streamlit when deployed os when local (quite cooool heheheh)
 
 # file paths
 
