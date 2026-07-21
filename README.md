@@ -1,9 +1,12 @@
-work in progress....
-click for app: https://foreign-film-recs.streamlit.app/
+# Foreign Language Film Recommendation System 
 
-So most film recommendation systems don’t explicitly provide foreign film recommendations which makes it harder for people to discover and appreciate international cinema. As someone who loves international films, I hoped that by building a recommendation system solely giving foreign film recommendations it allows cinema goers who are interested in this niche or just the curious to discover similar storytelling elements  explored in a different culture and setting. Hence this project aims to recommend foreign films that share similar themes, genres, or storytelling elements with well-known English-language movies.
+Most movie recommendation systems are designed to recommend similar movies regardless of language. While it's possible to filter these recommendations to only show foreign-language films, discovering international cinema isn't usually the main goal of the recommender.
 
-This project allows 
+As someone who loves international films, I wanted to build a recommendation system where foreign-language films are the focus rather than an afterthought. Instead of simply recommending similar movies, the aim is to help users discover foreign films that share similar themes, genres and storytelling elements with English-language movies they already enjoy, making it easier to explore cinema from different cultures.
+
+This project is a content-based movie recommender built with Sentence Transformers, Cosine Similarity, and the TMDB API, and deployed as an interactive Streamlit application.
+
+Live App: https://foreign-film-recs.streamlit.app/
 
 before we start these are my own top foreign film recs <3 
 * Anatomy of a Fall (2023)
@@ -14,16 +17,19 @@ before we start these are my own top foreign film recs <3
 
 
 ## Table of Contents
-- Overview of Project
-- Dataset Used
-- Installation
-- How to Use
-- Overview of Project
+- Project Overview
+- Recommendation Pipeline
+- Model Selection
+- Dataset
 - Areas for Improvement
 - Tech Stack
 
-## Overview of Project
 
+## Project Overview
+Users can search for any movie available on TMDB, and the application recommends the Top 5 most semantically similar foreign-language films.
+Unlike keyword-based recommenders, this project compares the meaning of movie overviews rather than simply matching overlapping words.
+
+## Recommendation Pipeline
 '''mermaid
 flowchart TD
       A([ User enters movie title])
@@ -32,7 +38,7 @@ flowchart TD
       D([Sentence Transformer encodes overview])
       E([Compare embedding with your precomputed movie embeddings])
       F([Cosine Similarity])
-      G([Return the top 5 most similar movies + overview +])
+      G([Return the top 5 most similar movies + overview +poster])
 
 A-->B
 B-->C
@@ -42,15 +48,44 @@ E-->F
 F-->G
 '''
 
-My aim was to build a content based recommendation system. In the experimentation phase to determine which nlp model to use, I started out testing the TF-IDF model to capture the meaning of the movie overview. After which I used cosine similarity on the embeddings to derive the similarity score. Movies witht he top 5 highest similarity scores were returned as the top recommendations . 
-However after a few test cases, I noticed that the recommendations just happened to have the same overlapping words in the overview and did not capture semantic similarity  of the overview.
+##Model Selection
 
-Hence my options were to use a neural network like word2vec or a transformer transfer learning model like Sentence Transformers. However word2vec doesnt capture the semantic context of the entire overview but for the individual words in the overview unlike sentence transformers. Hence I went ahead with sentence transformers and likewise used cosine similairyt to generate the similarity scores and give me the top 5 recommendations. From the test cases the movie recommendations usign sentence transformers aligned more with the themes and storyline of the searched movie.
+This project began by experimenting with TF-IDF as a baseline approach.
 
-I then saved the dataframe with the sentence transformer embedding. Afterwhich I created the logic for allowing users to search for any movie using the tmdb api and then using the transformer model to embed its overview and use cosine similarity to compare with the embeddings in the database. The recommendations are then filtered to only show films that are not in english and have a weighted rating>7.0
-Again I use the TMDB api to return the posters for the recommended films and the oveviews are returned from the databse. 
+The initial workflow was:
+* Convert movie overviews into TF-IDF vectors
+* Calculate cosine similarity
+* Recommend the five most similar films
+* 
+While TF-IDF performed reasonably well, it relied heavily on shared vocabulary. Movies with similar wording were often recommended even when their stories or themes were unrelated.I then looked into two alternatives: Word2Vec and Sentence Transformers.
+
+Although Word2Vec generates better word embeddings than TF-IDF, it learns representations for individual words rather than the meaning of an entire movie overview. Since my goal was to compare complete movie descriptions instead of just matching important words, I felt that Sentence Transformers were a better fit for this project.
+
+I therefore used the all-MiniLM-L6-v2 Sentence Transformer model to generate embeddings for each movie overview. I then calculated the cosine similarity between these embeddings to identify the most semantically similar movies.
+
+From my testing, the recommendations generated using Sentence Transformers aligned much better with the themes, storytelling and overall narrative of the searched movie, rather than simply recommending movies with similar wording in their overviews.
 
 
+## Dataset Used
 
+This project uses the Top 10,000 TMDB Highest Rated Movies dataset from Kaggle.
+https://www.kaggle.com/datasets/rosemeenshaikh/top-10000-tmdbs-highest-rated-movies
 
+I chose this dataset because it was already well cleaned,contained detailed movie overviews,includes original language information and contains highly rated films from many countries. One limitation is that the dataset was last updated in 2024.
+
+To ensure users can still search for newly released movies, I integrated the TMDB API into the search workflow. This allows users to search for virtually any movie currently listed on TMDB, while recommendations are generated using the precomputed embedding database.
+
+## Areas for Improvement
+
+### Better Horror Recommendations
+The recommender is best at recommending thriller/action films and the worst at giving suitable recommendations for horror films. This could be attributed to the fact that horror films have a relatively benign overview that doesnt give away the plot of the movie. 
+However this is a data limitation
+
+Potential improvements include:
+- incorporating genres and keywords into the embedding ( there's no in depth plot summary just a simple overview)
+- incorporating director information (most horror directors usually stick to directing horror)
+- fine-tuning a transformer model specifically on movie metadata
+
+## Tech Stack 
+* 
 
