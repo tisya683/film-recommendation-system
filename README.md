@@ -33,13 +33,13 @@ Unlike keyword-based recommenders, this project compares the meaning of movie ov
 ## Recommendation Pipeline
 ```mermaid
 flowchart LR
-      A([User enters movie title])
-      B([Search TMDB API])
-      C([Retrieve title + overview])
-      D([Sentence Transformer encodes overview])
-      E([Compare embedding with your precomputed movie embeddings])
-      F([Cosine Similarity])
-      G([Return the top 5 most similar movies + overview + poster])
+      A[User enters movie title]
+      B[Search TMDB API]
+      C[Retrieve title + overview]
+      D[Sentence Transformer encodes overview]
+      E[Compare embedding with your precomputed movie embeddings]
+      F[Cosine Similarity]
+      G[Return the top 5 most similar movies + overview + poster]
 
 A-->B
 B-->C
