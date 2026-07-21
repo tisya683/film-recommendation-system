@@ -20,7 +20,7 @@ before we start these are my own top foreign film recs <3
 - Project Overview
 - Recommendation Pipeline
 - Model Selection
-- Dataset
+- Dataset 
 - Local Installation
 - Areas for Improvement
 - Tech Stack
@@ -32,7 +32,7 @@ Unlike keyword-based recommenders, this project compares the meaning of movie ov
 
 ## Recommendation Pipeline
 ```mermaid
-flowchart TD
+flowchart LR
       A([User enters movie title])
       B([Search TMDB API])
       C([Retrieve title + overview])
@@ -49,7 +49,7 @@ E-->F
 F-->G
 ```
 
-##Model Selection
+## Model Selection
 
 This project began by experimenting with TF-IDF as a baseline approach.
 
@@ -67,7 +67,7 @@ I therefore used the all-MiniLM-L6-v2 Sentence Transformer model to generate emb
 From my testing, the recommendations generated using Sentence Transformers aligned much better with the themes, storytelling and overall narrative of the searched movie, rather than simply recommending movies with similar wording in their overviews.
 
 
-## Dataset Used
+## Dataset 
 
 This project uses the Top 10,000 TMDB Highest Rated Movies dataset from Kaggle.
 https://www.kaggle.com/datasets/rosemeenshaikh/top-10000-tmdbs-highest-rated-movies
